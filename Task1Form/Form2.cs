@@ -82,17 +82,23 @@ namespace Task1Form
 
 
             baglan.Open();
-
-            string insertQuery = "INSERT INTO Notes (Title, Description) VALUES (@title, @description)";
-            using (SqlCommand insertCommand = new SqlCommand(insertQuery, baglan))
+            if (textBox1.Text.Length <= 250 && richTextBox1.Text.Length <= 250)
             {
+                string insertQuery = "INSERT INTO Notes (Title, Description) VALUES (@title, @description)";
+                using (SqlCommand insertCommand = new SqlCommand(insertQuery, baglan))
+                {
 
-                insertCommand.Parameters.AddWithValue("@title",note.Description);
-                insertCommand.Parameters.AddWithValue("@description", note.Title);
+                    insertCommand.Parameters.AddWithValue("@title", note.Title);
+                    insertCommand.Parameters.AddWithValue("@description", note.Description);
 
-                insertCommand.ExecuteNonQuery();
+                    insertCommand.ExecuteNonQuery();
+                }
             }
-
+            else
+            {
+                MessageBox.Show("En fazla 250 karakter");
+               
+            }
             baglan.Close();
             dataGridView1.DataSource = null;
             dataGridView1.DataSource = GetNotes();
@@ -129,6 +135,10 @@ namespace Task1Form
             if (textBox1.Text.Length <= 250 && richTextBox1.Text.Length <= 250) { 
             SqlCommand updateCommand = new SqlCommand("update Notes set Title='"+note.Title+"',Description='"+note.Description+"' where ID='"+id+"'",baglan);
             updateCommand.ExecuteNonQuery();
+            }
+            else
+            {
+                MessageBox.Show("En fazla 250 karakter");
             }
             baglan.Close();
             dataGridView1.DataSource = null;
