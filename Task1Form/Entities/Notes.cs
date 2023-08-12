@@ -11,5 +11,6 @@ namespace Task1Form.Entities
         public int ID { get; set; }
         public String Title { get; set; }
         public String Description { get; set; }
+        public int UserID { get; set; }
     }
 }

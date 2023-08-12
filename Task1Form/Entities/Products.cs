@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace Task1Form.Entities
 {
-    public class AppUser
+    public class Products
     {
         public int ID { get; set; }
-        public string kullaniciAdi { get; set; }
-        public string sifre { get; set; }
+        public String Name { get; set; }
+        public String ProductDescription { get; set; }
+        public int Stock { get; set; }
+        public int UserID { get; set; }
     }
 }

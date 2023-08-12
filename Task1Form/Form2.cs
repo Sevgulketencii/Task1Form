@@ -16,12 +16,19 @@ namespace Task1Form
     {
         #region MODELS
         static SqlConnection baglan = new SqlConnection("server=DESKTOP-5N8R6K8;database=FormTask1;integrated security=True");
+        AppUser user = new AppUser();
         static int id;
         #endregion
 
         #region CTOR
         public Form2()
         {
+            
+            InitializeComponent();
+        }
+        public Form2(AppUser user)
+        {
+            this.user = user;
             InitializeComponent();
         }
         #endregion
@@ -30,11 +37,10 @@ namespace Task1Form
         private void Form2_Load(object sender, EventArgs e)
         {
             List<Notes> veriler = GetNotes();
-
+         
             dataGridView1.DataSource = veriler;
             dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
 
-            // Sütun boyutunu içeriğe göre ayarlayın
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }
         #endregion
@@ -47,7 +53,7 @@ namespace Task1Form
             baglan.Open();
 
            
-            SqlCommand getUser = new SqlCommand("SELECT * FROM Notes order by ID desc", baglan);
+            SqlCommand getUser = new SqlCommand("SELECT * FROM Notes where UserID='" + user.ID + "' order by ID desc", baglan);
    
             SqlDataReader dr = getUser.ExecuteReader();
                 List<Notes> veriler= new List<Notes>();
@@ -77,19 +83,20 @@ namespace Task1Form
             {
                 Description = richTextBox1.Text,
                 Title = textBox1.Text,
-
+                UserID=user.ID,
             };
 
 
             baglan.Open();
             if (textBox1.Text.Length <= 250 && richTextBox1.Text.Length <= 250)
             {
-                string insertQuery = "INSERT INTO Notes (Title, Description) VALUES (@title, @description)";
+                string insertQuery = "INSERT INTO Notes (Title, Description,UserID) VALUES (@title, @description,@UserID)";
                 using (SqlCommand insertCommand = new SqlCommand(insertQuery, baglan))
                 {
 
                     insertCommand.Parameters.AddWithValue("@title", note.Title);
                     insertCommand.Parameters.AddWithValue("@description", note.Description);
+                    insertCommand.Parameters.AddWithValue("@userID", note.UserID);
 
                     insertCommand.ExecuteNonQuery();
                 }
@@ -156,8 +163,15 @@ namespace Task1Form
             dataGridView1.DataSource = null;
             dataGridView1.DataSource = GetNotes();
         }
+
         #endregion
 
-     
+        #region FORMCLOSE
+        private void Form_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.Show();
+        }
+        #endregion
+
     }
 }

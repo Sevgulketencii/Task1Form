@@ -16,6 +16,7 @@ namespace Task1Form
     {
         #region MODEL
         static SqlConnection baglan = new SqlConnection("server=DESKTOP-5N8R6K8;database=FormTask1;integrated security=True");
+        
         #endregion
 
         #region CTOR
@@ -48,7 +49,7 @@ namespace Task1Form
             AppUser kullanici = new AppUser();
             while (dr.Read())
             {
-                
+                kullanici.ID = dr.GetInt32("ID");
                 kullanici.kullaniciAdi = dr.GetString("Username");
                 kullanici.sifre = dr.GetString("Password");
 
@@ -56,9 +57,14 @@ namespace Task1Form
 
             if (kullanici.kullaniciAdi!=null)
             {
-                Form2 form2 = new Form2();
-                form2.FormClosed += Form2_FormClosed;
-                form2.Show();
+                
+
+
+
+                Form4 form4 = new Form4(kullanici);
+            
+                form4.FormClosed += Form_FormClosed;
+                form4.Show();
                 this.Hide();
             }
             else
@@ -69,9 +75,9 @@ namespace Task1Form
            
         }
         #endregion
-
-        #region FORM2CLOSE
-        private void Form2_FormClosed(object sender, FormClosedEventArgs e)
+       
+        #region FORMCLOSE
+        private void Form_FormClosed(object sender, FormClosedEventArgs e)
         {
             this.Show();
         }
